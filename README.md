@@ -3,8 +3,8 @@ Medusa Upcoming TV Shows
 A Home Assistant sensor that pulls the latest upcoming TV shows from Medusa. This is a fork of Youdroid's [SickChill Wanted Tv Shows](https://github.com/youdroid/home-assistant-sickchill) with a few fixes such as compability with the awesome [Flex Table](https://github.com/custom-cards/flex-table-card) and better airdate handling. The sensor should work with any Sick* fork (SickChill, SickRage, etc.).
 
 ## Installation using HACS (Recommended)
-1. Navigate to HACS and add a custom repository
-    **URL:** https://git.idmedia.no/home-assistant/hass-medusa
+1. Navigate to HACS and add a custom repository  
+    **URL:** https://git.idmedia.no/home-assistant/hass-medusa  
     **Category:** Integration
 2. Install module as usual
 3. Restart Home Assistant
@@ -23,6 +23,7 @@ The sensor is compatible with [Upcoming Media Card](https://github.com/custom-ca
 | webroot |  | no | WebRoot parameter if you change it in config.ini (Syntax : **/newWebRoot**)
 
 ## Example
+![Screenshot](screenshot.png "Screenshot")  
 Add the following to your `configuration.yaml`:
 ```
 sensor:

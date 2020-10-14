@@ -1,0 +1,5 @@
+{
+  "name": "Medusa",
+  "domains": ["sensor"],
+  "render_readme": true
+}
