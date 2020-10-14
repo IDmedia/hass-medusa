@@ -1,0 +1,8 @@
+{
+  "domain": "medusa",
+  "name": "Medusa Upcoming TV Shows",
+  "documentation": "https://github.com/IDmedia/hass-medusa",
+  "requirements": [],
+  "dependencies": [],
+  "codeowners": ["@IDmedia"]
+}
