@@ -4,5 +4,8 @@
   "documentation": "https://github.com/IDmedia/hass-medusa",
   "requirements": [],
   "dependencies": [],
-  "codeowners": ["@IDmedia"]
+  "version": "1.0.0",
+  "codeowners": [
+    "@IDmedia"
+  ]
 }
