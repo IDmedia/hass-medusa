@@ -4,7 +4,7 @@ A Home Assistant sensor that pulls the latest upcoming TV shows from Medusa. Thi
 
 ## Installation using HACS (Recommended)
 1. Navigate to HACS and add a custom repository  
-    **URL:** https://github.com/IDmedia/hass-medusa 
+    **URL:** https://github.com/IDmedia/hass-medusa
     **Category:** Integration
 2. Install module as usual
 3. Restart Home Assistant
