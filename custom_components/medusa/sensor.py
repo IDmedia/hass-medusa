@@ -62,7 +62,7 @@ class MedusaSensor(Entity):
         return self._state
 
     @property
-    def device_state_attributes(self):
+    def extra_state_attributes(self):
         """Return the state attributes."""
         return self.data
 
@@ -81,20 +81,22 @@ class MedusaSensor(Entity):
         card_json.append(init)
 
         tv_shows = self.get_infos(self.protocol, self.host, self.port, self.token, self.web_root, 'future')
-
+        
         directory = "{0}/www/custom-lovelace/{1}/images/".format(self.base_dir, self._name)
         if not os.path.exists(directory):
             os.makedirs(directory)
-        regex_img = re.compile(r'\d+-(fanart|poster)\.jpg')
+        regex_img = re.compile(r'\d+-(fanart|poster|banner)\.jpg')
         lst_images = list(filter(regex_img.search,
                                  os.listdir(directory)))
+        del_images = list(filter(regex_img.search,
+                                 os.listdir(directory)))  
 
         for category in tv_shows["data"]:
             for show in tv_shows["data"].get(category):
                 
                 airdate_str = show["airdate"] + ' ' + show["airs"]
                 airdate_dt = datetime.strptime(airdate_str, "%Y-%m-%d %A %I:%M %p")
-                airdate = airdate_dt.strftime("%Y-%m-%d %H:%M:%SZ")
+                airdate = airdate_dt.strftime("%Y-%m-%dT%H:%M:%SZ")
                 
                 number = "S" + str(show["season"]).zfill(2) + "E" + str(show["episode"]).zfill(2)
                 
@@ -110,9 +112,9 @@ class MedusaSensor(Entity):
                 card_items["title"] = show["show_name"]
                 card_items["episode"] = show["ep_name"]
                 card_items["release"] = '$day, $date $time'
-                card_items["poster"] = self.add_poster(lst_images, directory, poster, show["indexerid"], card_items)
-                card_items["fanart"] = self.add_fanart(lst_images, directory, fanart, show["indexerid"], card_items)
-                card_items["banner"] = self.add_banner(lst_images, directory, banner, show["indexerid"], card_items)                
+                card_items["poster"] = self.add_poster(lst_images, directory, poster, show["indexerid"], card_items, del_images)
+                card_items["fanart"] = self.add_fanart(lst_images, directory, fanart, show["indexerid"], card_items, del_images)
+                card_items["banner"] = self.add_banner(lst_images, directory, banner, show["indexerid"], card_items, del_images)                
 
                 card_shows.append(card_items)
 
@@ -122,20 +124,21 @@ class MedusaSensor(Entity):
         attributes["data"] = card_json
         self._state = tv_shows["result"]
         self.data = attributes
-        self.delete_old_tvshows(lst_images, directory)
+        self.delete_old_tvshows(del_images, directory)
 
     def get_infos(self, proto, host, port, token, web_root, cmd):
-        url = "{0}://{1}:{2}{3}/api/{4}/?cmd={5}".format(
+        url = "{0}://{1}:{2}{3}/api/{4}/?cmd={5}&type=today|soon".format(
             proto, host, port, web_root, token, cmd)
         ifs_movies = requests.get(url).json()
         return ifs_movies
 
-    def add_poster(self, lst_images, directory, poster, id, card_items):
+    def add_poster(self, lst_images, directory, poster, id, card_items, del_images):
         if poster in lst_images:
-            lst_images.remove(poster)
+            if poster in del_images:
+               del_images.remove(poster)
+
         else:
             img_data = requests.get("{0}://{1}:{2}{3}/api/v1/{4}/?cmd=show.getposter&indexerid={5}".format(self.protocol, self.host, self.port, self.web_root, self.token, id))
-            
             if not img_data.status_code.__eq__(200):
                 _LOGGER.error(card_items)
                 return ""
@@ -146,9 +149,10 @@ class MedusaSensor(Entity):
                 _LOGGER.error("Unable to create file.")
         return "/local/custom-lovelace/{0}/images/{1}".format(self._name, poster)
 
-    def add_fanart(self, lst_images, directory, fanart, id, card_items):
+    def add_fanart(self, lst_images, directory, fanart, id, card_items, del_images):
         if fanart in lst_images:
-            lst_images.remove(fanart)
+            if fanart in del_images:
+               del_images.remove(fanart)
         else:
             img_data = requests.get("{0}://{1}:{2}{3}/api/v1/{4}/?cmd=show.getfanart&indexerid={5}".format(self.protocol, self.host, self.port, self.web_root, self.token, id))
 
@@ -161,11 +165,12 @@ class MedusaSensor(Entity):
                 _LOGGER.error("Unable to create file.")
         return "/local/custom-lovelace/{0}/images/{1}".format(self._name, fanart)
 
-    def add_banner(self, lst_images, directory, banner, id, card_items):
+    def add_banner(self, lst_images, directory, banner, id, card_items, del_images):
         if banner in lst_images:
-            lst_images.remove(banner)
+            if banner in del_images:
+               del_images.remove(banner)
         else:
-            img_data = requests.get("{0}://{1}:{2}/api/v1/{3}/?cmd=show.getbanner&indexerid={4}".format(self.protocol, self.host, self.port, self.token, id))
+            img_data = requests.get("{0}://{1}:{2}/api/v1/{4}/?cmd=show.getbanner&indexerid={4}".format(self.protocol, self.host, self.port, self.web_root, self.token, id))
 
             if not img_data.status_code.__eq__(200):
                 return ""
@@ -176,8 +181,8 @@ class MedusaSensor(Entity):
                 _LOGGER.error("Unable to create file.")
         return "/local/custom-lovelace/{0}/images/{1}".format(self._name, banner)
         
-    def delete_old_tvshows(self, lst_images, directory):
-        for img in lst_images:
+    def delete_old_tvshows(self, del_images, directory):
+        for img in del_images:
             try:
                 os.remove(directory + img)
                 _LOGGER.info("Delete finished tv show images")
