@@ -80,7 +80,7 @@ class MedusaSensor(Entity):
         init['icon'] = 'mdi:eye-off'
         card_json.append(init)
 
-        tv_shows = self.get_infos(self.protocol, self.host, self.port, self.token, self.web_root, 'future')
+        tv_shows = self.get_infos(self.protocol, self.host, self.port, self.web_root, self.token, 'future')
         
         directory = "{0}/www/custom-lovelace/{1}/images/".format(self.base_dir, self._name)
         if not os.path.exists(directory):
@@ -126,8 +126,8 @@ class MedusaSensor(Entity):
         self.data = attributes
         self.delete_old_tvshows(del_images, directory)
 
-    def get_infos(self, proto, host, port, token, web_root, cmd):
-        url = "{0}://{1}:{2}{3}/api/{4}/?cmd={5}&type=today|soon".format(
+    def get_infos(self, proto, host, port, web_root, token, cmd):
+        url = "{0}://{1}:{2}{3}/api/v1/{4}/?cmd={5}&type=today|soon".format(
             proto, host, port, web_root, token, cmd)
         ifs_movies = requests.get(url).json()
         return ifs_movies
