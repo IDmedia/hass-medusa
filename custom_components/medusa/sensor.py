@@ -170,7 +170,7 @@ class MedusaSensor(Entity):
             if banner in del_images:
                del_images.remove(banner)
         else:
-            img_data = requests.get("{0}://{1}:{2}/api/v1/{4}/?cmd=show.getbanner&indexerid={4}".format(self.protocol, self.host, self.port, self.web_root, self.token, id))
+            img_data = requests.get("{0}://{1}:{2}/api/v1/{4}/?cmd=show.getbanner&indexerid={5}".format(self.protocol, self.host, self.port, self.web_root, self.token, id))
 
             if not img_data.status_code.__eq__(200):
                 return ""
