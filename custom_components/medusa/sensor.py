@@ -111,7 +111,8 @@ class MedusaSensor(Entity):
                 card_items["studio"] = show["network"]
                 card_items["title"] = show["showName"]
                 card_items["episode"] = show["epName"]
-                card_items["release"] = '$day, $date $time'
+                card_items["release"] = show["airdate"]
+                card_items["runtime"] = show["runtime"]
                 card_items["poster"] = self.add_poster(lst_images, directory, poster, show["showSlug"], card_items, del_images)
                 card_items["fanart"] = self.add_fanart(lst_images, directory, fanart, show["showSlug"], card_items, del_images)
                 card_items["banner"] = self.add_banner(lst_images, directory, banner, show["showSlug"], card_items, del_images)                
