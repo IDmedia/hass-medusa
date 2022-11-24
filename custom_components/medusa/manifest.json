@@ -1,11 +1,11 @@
 {
   "domain": "medusa",
   "name": "Medusa Upcoming TV Shows",
-  "documentation": "https://github.com/the-jeffski/hass-medusa",
+  "documentation": "https://github.com/IDmedia/hass-medusa",
   "requirements": [],
   "dependencies": [],
   "version": "1.0.2",
   "codeowners": [
-    "@IDmedia @the-jeffski"
+    "@IDmedia"
   ]
 }
