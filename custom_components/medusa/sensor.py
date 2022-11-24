@@ -33,7 +33,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
-    add_entities([MedusaSensor(config, hass)])
+    add_entities([MedusaSensor(config, hass)], True)
 
 
 class MedusaSensor(Entity):
