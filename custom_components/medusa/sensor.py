@@ -1,15 +1,15 @@
 """Platform for sensor integration."""
-import json
-import logging
 import os
 import re
-from datetime import datetime
-import homeassistant.helpers.config_validation as cv
+import json
+import logging
 import requests
 import voluptuous as vol
-from homeassistant.components.switch import PLATFORM_SCHEMA
-from homeassistant.const import *
+from datetime import datetime
 from homeassistant.helpers.entity import Entity
+import homeassistant.helpers.config_validation as cv
+from homeassistant.components.switch import PLATFORM_SCHEMA
+from homeassistant.const import (CONF_NAME, CONF_PORT, CONF_TOKEN, CONF_HOST, CONF_PROTOCOL)
 
 _LOGGER = logging.getLogger(__name__)
 DEFAULT_NAME = "medusa"
